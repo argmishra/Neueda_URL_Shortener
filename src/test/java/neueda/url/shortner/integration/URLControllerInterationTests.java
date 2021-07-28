@@ -1,4 +1,4 @@
-package com;
+package neueda.url.shortner.integration;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,10 +32,6 @@ import com.neueda.url.shortner.service.URLService;
 @AutoConfigureMockMvc
 public class URLControllerInterationTests {
 
-	// assert Values
-	// change method name
-	// move to package
-	// code coverage
 	@MockBean
 	private URLService urlService;
 
@@ -45,12 +41,13 @@ public class URLControllerInterationTests {
 	@MockBean
 	private HttpServletResponse response;
 
-	Url url;
+	private Url url;
 
-	String original = "https://www.google.com/";
+	private final String original = "https://www.google.com/";
 
-	String small = "http://bit.ly/qqqqq";
-	List<String> urls;
+	private final String small = "http://bit.ly/qqqqq";
+
+	private List<String> urls;
 
 	ObjectMapper mapper = new ObjectMapper();
 
@@ -61,12 +58,11 @@ public class URLControllerInterationTests {
 		url.setOriginalUrl(original);
 		urls = new ArrayList();
 		urls.add(original);
-
 	}
 
 	@WithMockUser(username = "user", password = "password")
 	@Test
-	public void findByShortUrl() throws Exception {
+	public void createShortUrl_success() throws Exception {
 		Mockito.when(urlService.createShortUrl(urls)).thenReturn(List.of(url));
 
 		mockMvc.perform(

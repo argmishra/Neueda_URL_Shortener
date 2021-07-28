@@ -28,13 +28,13 @@ public class URLController {
 
 	@PostMapping(value = "/short")
 	public List<Url> createShortUrl(@Valid @RequestBody List<String> urls) {
-		log.debug("Create short url");
+		log.info("Create short url");
 		return urlService.createShortUrl(urls);
 	}
 
 	@GetMapping(value = "/original")
 	public void getOriginalUrl(@Valid @RequestBody Url url, HttpServletResponse response) throws IOException {
-		log.debug("Get original url");
+		log.info("Get original url");
 		response.sendRedirect(urlService.getOriginalUrl(url));
 	}
 

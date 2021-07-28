@@ -1,4 +1,4 @@
-package com;
+package neueda.url.shortner.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doNothing;
@@ -31,10 +31,6 @@ import com.neueda.url.shortner.service.URLService;
 @Transactional
 public class URLControllerTests {
 
-	// assert Values
-	// change method name
-	// move to package
-
 	@MockBean
 	private URLService urlService;
 
@@ -44,13 +40,13 @@ public class URLControllerTests {
 	@Autowired
 	private URLController urlController;
 
-	Url url;
+	private Url url;
 
-	String original = "https://www.google.com/";
+	private final String original = "https://www.google.com/";
 
-	String small = "http://bit.ly/qqqqq";
+	private final String small = "http://bit.ly/qqqqq";
 
-	List<String> urls;
+	private List<String> urls;
 
 	@BeforeEach
 	public void setup() throws IOException {
@@ -62,7 +58,7 @@ public class URLControllerTests {
 	}
 
 	@Test
-	public void findByShortUrl() throws IOException {
+	public void getOriginalUrl_success() throws IOException {
 		Mockito.when(urlService.getOriginalUrl(url)).thenReturn(original);
 		doNothing().when(response).sendRedirect(original);
 
@@ -73,7 +69,7 @@ public class URLControllerTests {
 	}
 
 	@Test
-	public void fffffffff() throws IOException {
+	public void createShortUrl_success() throws IOException {
 		Mockito.when(urlService.createShortUrl(urls)).thenReturn(List.of(url));
 
 		List<Url> urlList = urlController.createShortUrl(urls);

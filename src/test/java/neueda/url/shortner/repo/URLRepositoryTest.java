@@ -1,4 +1,6 @@
-package com;
+package neueda.url.shortner.repo;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,34 +22,33 @@ import com.neueda.url.shortner.repo.URLRepository;
 @Transactional
 public class URLRepositoryTest {
 
-	// assert Values
-	// change method name
-	// move to package
-
 	@Autowired
-	URLRepository urlRepository;
+	private URLRepository urlRepository;
 
-	Url url;
+	private Url url;
+
+	private final String original = "https://www.google.com/";
+
+	private final String small = "http://bit.ly/qqqqq";
 
 	@BeforeEach
 	public void setup() {
 		url = new Url();
-		url.setOriginalUrl("original");
-		url.setShortUrl("short");
+		url.setOriginalUrl(original);
+		url.setShortUrl(small);
 		urlRepository.save(url);
 	}
 
 	@Test
-	public void findByShortUrl() {
-		Optional<Url> url = urlRepository.findByShortUrl("short");
-		System.out.print(url.get().getShortUrl());
+	public void findByShortUrl_success() {
+		Optional<Url> url = urlRepository.findByShortUrl(small);
+		assertEquals(small, url.get().getShortUrl());
 	}
 
 	@Test
-	public void findAllByOriginalUrlIn() {
-		List<Url> url = urlRepository.findAllByOriginalUrlIn(List.of("original"));
-		System.out.print(url.size());
-
+	public void findAllByOriginalUrlIn_success() {
+		List<Url> url = urlRepository.findAllByOriginalUrlIn(List.of(original));
+		assertEquals(1, url.size());
 	}
 
 }

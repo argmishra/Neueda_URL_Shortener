@@ -2,11 +2,9 @@ package com.neueda.url.shortner.service.impl;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,24 +27,12 @@ public class URLServiceImpl implements URLService {
 	@Override
 	public List<Url> createShortUrl(List<String> urls) {
 		this.validation(urls);
-		List<Url> urlList = urlRepository.findAllByOriginalUrlIn(urls);
-		List<String> originalUrlList = new ArrayList<>();
-		for (Url url : urlList) {
-			originalUrlList.add(url.getOriginalUrl());
-		}
-		urls.removeAll(originalUrlList);
+		List<String> originalUrlList = getUrlList(urls);
 
-		Url url = null;
-		for (String u : urls) {
-			url = new Url();
-			url.setOriginalUrl(u);
-			url.setShortUrl(PARTIAL_URL + RandomStringUtils.randomAlphanumeric(5).toLowerCase());
-			urlList.add(url);
-		}
+		List<Url> saveList = getSaveList(urls, originalUrlList);
+		urlRepository.saveAll(saveList);
 
-		urlRepository.saveAll(urlList);
-		return urlRepository.findAllByOriginalUrlIn(
-				Stream.of(urls, originalUrlList).flatMap(Collection::stream).collect(Collectors.toList()));
+		return urlRepository.findAllByOriginalUrlIn(urls);
 	}
 
 	@Override
@@ -66,6 +52,27 @@ public class URLServiceImpl implements URLService {
 				throw new MalformedURLException("Malform URL");
 			}
 		}
+	}
+
+	private List<String> getUrlList(List<String> urls) {
+		List<String> originalUrlList = new ArrayList<>();
+		for (Url url : urlRepository.findAllByOriginalUrlIn(urls)) {
+			originalUrlList.add(url.getOriginalUrl());
+		}
+		return originalUrlList;
+	}
+
+	private List<Url> getSaveList(List<String> urls, List<String> originalUrlList) {
+		List<Url> saveList = new ArrayList<>();
+		Url url = null;
+		for (String u : urls.stream().filter(aObject -> !originalUrlList.contains(aObject))
+				.collect(Collectors.toList())) {
+			url = new Url();
+			url.setOriginalUrl(u);
+			url.setShortUrl(PARTIAL_URL + RandomStringUtils.randomAlphanumeric(5).toLowerCase());
+			saveList.add(url);
+		}
+		return saveList;
 	}
 
 }

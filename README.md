@@ -17,6 +17,6 @@ Neueda Technologies - URL Shortner
 8. In Memory Database - Implemented (Refer properties file) 
 9. Basic Authentication - Implemented
 10. Run Script - Implemented
-11. Unit Testing 
-12. Integration Testing
-13. Code Coverage
+11. Unit Testing - Implemented
+12. Integration Testing - Implemented
+13. Code Coverage - Implemented
