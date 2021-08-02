@@ -1,4 +1,4 @@
-Neueda Technologies - URL Shortner
+URL Shortner
 ==========
         
 ## Prerequisite
